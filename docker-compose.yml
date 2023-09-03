@@ -1,7 +1,27 @@
 services:
   app:
     build: .
+    container_name: shortener
     ports:
       - "3000:3000"
+    networks:
+      - shortener
+    restart: always
+    depends_on:
+      - redis
   redis:
     image: "redis:alpine"
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - shortener
+    volumes:
+      - /usr/local/redis:/root/redis
+    env_file:
+      - .env
+networks:
+  shortener: 
+    name: shortener
+    driver: bridge

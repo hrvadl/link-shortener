@@ -4,9 +4,11 @@ import (
 	"log/slog"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/hrvadl/link-shortener/pkg/handlers"
 	"github.com/hrvadl/link-shortener/pkg/repository"
 	"github.com/hrvadl/link-shortener/pkg/services"
+	"github.com/joho/godotenv"
 )
 
 type Server struct {
@@ -17,12 +19,16 @@ type Server struct {
 func New(l *slog.Logger) (*Server, error) {
 	app := fiber.New()
 
+	if err := godotenv.Load("../.env"); err != nil {
+		log.Error("cannot load .env file")
+	}
+
 	repo := repository.NewLinkRepo()
 	service := services.NewURLShortener(repo)
 	handler := handlers.NewLinkShortener(service)
 
-	app.Get("/short/:hash", handler.HandleGetURL)
-	app.Post("/", handler.HandleGetURL)
+	app.Get("/short/:id", handler.HandleGetURL)
+	app.Post("/", handler.HandleShortenURL)
 
 	server := &Server{
 		app: app,
