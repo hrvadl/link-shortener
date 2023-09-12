@@ -4,7 +4,7 @@ Application to shorten link
 
 ## How to run?
 
-You can use docker compose to run both database & server in isolated environment. Type `docker compose up -d` in your terminal from the root of the project.
+You can use docker compose to run both the database & server in an isolated environment. Type `docker compose up -d` in your terminal from the project's root.
 
 ## How to use it?
 
@@ -16,4 +16,4 @@ Send a `POST` request to `/`  with the following body
 }
 ```
 
-You'll recevive the srot version of your desired URL.
+You'll receive the short version of your desired URL.
