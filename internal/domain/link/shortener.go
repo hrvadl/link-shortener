@@ -7,9 +7,10 @@ import (
 	"errors"
 )
 
-func NewShortener(links LinksSource) *Shortener {
+func NewShortener(links LinksSource, baseURL string) *Shortener {
 	return &Shortener{
-		links: links,
+		links:   links,
+		baseURL: baseURL,
 	}
 }
 
@@ -20,7 +21,8 @@ type LinksSource interface {
 }
 
 type Shortener struct {
-	links LinksSource
+	links   LinksSource
+	baseURL string
 }
 
 func (e *Shortener) Shorten(ctx context.Context, url string) (string, error) {
@@ -34,7 +36,7 @@ func (e *Shortener) Shorten(ctx context.Context, url string) (string, error) {
 		return "", errors.Join(ErrFailedToShorten, err)
 	}
 
-	return hashedURL, nil
+	return e.baseURL + hashedURL, nil
 }
 
 func (e *Shortener) Get(ctx context.Context, hash string) (string, error) {

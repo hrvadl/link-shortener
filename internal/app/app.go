@@ -21,7 +21,7 @@ func New(cfg *config.Config, log *slog.Logger) *App {
 
 	redis := db.NewRedis(cfg.RedisAddr, cfg.RedisPassword)
 	repo := linkstorage.NewRepo(redis)
-	shortener := linkdomain.NewShortener(repo)
+	shortener := linkdomain.NewShortener(repo, getBaseURL(cfg.Addr, cfg.Port))
 	handler := link.NewHandler(shortener)
 
 	fiberSrv.Get("/:id", handler.HandleGetURL)
@@ -58,4 +58,12 @@ func (s *App) StopGracefully() error {
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
 	<-stop
 	return s.app.Shutdown()
+}
+
+func getBaseURL(addr, port string) string {
+	scheme := "http://"
+	if addr == "" {
+		addr = "localhost"
+	}
+	return scheme + net.JoinHostPort(addr, port) + "/"
 }
