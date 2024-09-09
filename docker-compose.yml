@@ -9,19 +9,22 @@ services:
     restart: always
     depends_on:
       - redis
+
   redis:
     image: "redis:alpine"
     container_name: redis
     restart: always
-    ports:
-      - "6379:6379"
     networks:
       - shortener
     volumes:
-      - /usr/local/redis:/root/redis
+      - redisdata:/root/redis
     env_file:
       - .env
+
 networks:
-  shortener: 
+  shortener:
     name: shortener
     driver: bridge
+
+volumes:
+  redisdata:
