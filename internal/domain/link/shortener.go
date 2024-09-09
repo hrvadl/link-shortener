@@ -2,8 +2,7 @@ package link
 
 import (
 	"context"
-
-	"github.com/google/uuid"
+	"encoding/base64"
 )
 
 func NewShortener(links LinksSource) *Shortener {
@@ -22,12 +21,12 @@ type Shortener struct {
 }
 
 func (e *Shortener) Shorten(ctx context.Context, url string) (string, error) {
-	uuid := uuid.New().String()
-	if err := e.links.Set(ctx, uuid, url); err != nil {
+	id := base64.StdEncoding.EncodeToString([]byte(url))
+	if err := e.links.Set(ctx, id, url); err != nil {
 		return "", err
 	}
 
-	return uuid, nil
+	return id, nil
 }
 
 func (e *Shortener) Get(ctx context.Context, uuid string) (string, error) {

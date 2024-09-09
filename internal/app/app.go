@@ -2,6 +2,7 @@ package app
 
 import (
 	"log/slog"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
@@ -42,14 +43,14 @@ type App struct {
 }
 
 func (s *App) MustRun() {
-	if err := s.Run(s.cfg.Port); err != nil {
+	if err := s.Run(); err != nil {
 		panic(err)
 	}
 }
 
-func (s *App) Run(port string) error {
-	s.log.Info("Server has been started", slog.String("port", port))
-	return s.app.Listen(port)
+func (s *App) Run() error {
+	s.log.Info("Server has been started", slog.String("port", s.cfg.Port))
+	return s.app.Listen(net.JoinHostPort(s.cfg.Addr, s.cfg.Port))
 }
 
 func (s *App) StopGracefully() error {

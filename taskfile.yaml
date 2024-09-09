@@ -8,6 +8,9 @@ tasks:
   docker-run:
     cmds:
       - docker compose up -d
+  docker-stop:
+    cmds:
+      - docker compose down
   test:
     cmds:
       - go test ./... -v

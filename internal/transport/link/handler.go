@@ -25,14 +25,14 @@ func (s *Handler) HandleGetURL(ctx *fiber.Ctx) error {
 	uuid := ctx.Params("id")
 	url, err := s.shortener.Get(ctx.Context(), uuid)
 	if err != nil {
-		return fiber.NewError(fiber.StatusNotFound, err.Error())
+		return fiber.NewError(fiber.StatusNotFound, "Page is not found!")
 	}
 
-	return ctx.Redirect(url)
+	return ctx.Redirect(url, fiber.StatusPermanentRedirect)
 }
 
 type postBody struct {
-	URL string `json:"url"`
+	URL string `json:"url" validate:"required"`
 }
 
 func (s *Handler) HandleShortenURL(ctx *fiber.Ctx) error {
