@@ -1,4 +1,4 @@
-# link-shortener
+# Simple link shortener
 
 Application to shorten link
 
@@ -8,7 +8,7 @@ You can use docker compose to run both the database & server in an isolated envi
 
 ## How to use it?
 
-Send a `POST` request to `/`  with the following body
+Send a `POST` request to `/` with the following body
 
 ```json
 {
